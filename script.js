@@ -1,9 +1,9 @@
 "use strict";
-var toDoList = JSON.parse(localStorage.getItem("toDoList"));
-getAllItems();
+var toDoList = getToDoListFromStorage();
+itemsSort();
 
 document.querySelector('.addBTN').addEventListener('click', addToDoElement);
-document.querySelector('.getBTN').addEventListener('click', getAllItems);
+document.querySelector('.getBTN').addEventListener('click', itemsSort());
 
 document.querySelector('.clearBTN').addEventListener('click', clearSection);
 document.querySelector('.clearBTN').addEventListener('dblclick', clearLockalStorage);
@@ -11,33 +11,38 @@ document.querySelector('.clearBTN').addEventListener('dblclick', clearLockalStor
 
 document.querySelector('.dateSort').addEventListener('click', () => {
 	if (toDoList != null) {
-		if (toDoList.sortBy == "important") {
+		if (toDoList.sortBy == "importance") {
 			toDoList.order = "asc";
 			toDoList.sortBy = "date";
 		}
 		else {
 			toDoList.order = toDoList.order == "asc" ? "desc" : "asc";
 		}
+		console.log("dateSort  " + toDoList.sortBy + " " + toDoList.order)
+		itemsSort();
+		saveTODOList();
 	}
-	//console.log(toDoList);
-	getAllItems();
-	saveTODOList();
 });
 document.querySelector('.importanceSort').addEventListener('click', () => {
-	//console.log("dateSort");
 	if (toDoList != null) {
 		if (toDoList.sortBy == "date") {
 			toDoList.order = "asc";
-			toDoList.sortBy = "important";
+			toDoList.sortBy = "importance";
 		}
 		else {
 			toDoList.order = toDoList.order == "asc" ? "desc" : "asc";
 		}
+		console.log("importanceSort  " + toDoList.sortBy + " " + toDoList.order)
+		itemsSort();
+		saveTODOList();
 	}
-	getAllItems();
-	saveTODOList();
 });
 
+function getToDoListFromStorage(){
+	let temp = JSON.parse(localStorage.getItem("toDoList"));
+	if(temp != null) return JSON.parse(localStorage.getItem("toDoList"))
+	else document.querySelector('.toDoSection').innerHTML = "Відсутні збережені завдання";
+}
 
 ///
 var dialog = document.getElementById('dialog');
@@ -53,7 +58,7 @@ function addToDoElement() {
 		if (toDoList == null) {
 			toDoList = {
 				name: "toDoList",
-				sortBy: "date",//"date", //important
+				sortBy: "date",//"date", //importance
 				order: "asc",//"asc", desc
 				language: navigator.language,
 				elements: {}
@@ -68,43 +73,72 @@ function addToDoElement() {
 		};
 		localStorage.setItem(toDoList.name, JSON.stringify(toDoList));
 		document.querySelector('.text').value = "";
-		getAllItems();
+		itemsSort();
 	}
 	else {
 		alert("Помилка: неможливо додати заплановану дію не ввівши її опис.\r\nВведіть будь ласка опис і натисніть кнопку Додати")
 	}
 }
 
-function getAllItems() {
-	clearSection();
+function itemsSort() {
 	if (toDoList != null) {
 		//console.log(toDoList)
-		let toDoListEl = JSON.parse(localStorage.getItem("toDoList")).elements;
-		var itemsKeys = Object.keys(toDoListEl);
+		let toDoListEl = toDoList.elements;		
+		console.log(toDoListEl)
 		if (toDoList.sortBy == "date") {
+			let itemsKeys = Object.keys(toDoListEl);
 			itemsKeys = itemsKeys.sort();
-			//console.log(itemsKeys)
 			if (toDoList.order == "desc") {
-				itemsKeys = itemsKeys.sort().reverse()
-				//console.log(itemsKeys);
-			};
+				itemsKeys = itemsKeys.reverse();
+			}
+
+			clearSection();
+			itemsKeys.forEach(item => {
+				let el = toDoListEl[String(item)];
+				addElementsToSection(item, el);
+			});
 		}
-		itemsKeys.forEach(item => {
-			let el = toDoListEl[String(item)];
-			let date = new Date(Number(item));
-			addElementsToSection(item, date, el)
-		});
+		else if(toDoList.sortBy == "importance"){
+			console.log("sort by imp");
+			var sortable = [];
+			for (let element in toDoListEl) {
+				sortable.push([element, toDoListEl[element]["importance"]]);				
+			}
+			sortable.sort(function(a, b) {					
+				return a[1] - b[1];
+			});
+			//console.log(sortable);
+			/*var objSorted = {}
+				sortable.forEach(function(item){
+					objSorted[item[0]]=item[1]
+				})*/
+			//console.log(objSorted);
+			if (toDoList.order == "desc"){
+				sortable.reverse();
+			}
+
+			clearSection();
+			for(let i=0; i < sortable.length; i++){
+				//console.log(toDoListEl[sortable[i][0]]);
+				let el = toDoListEl[sortable[i][0]];
+				let date = new Date(Number(sortable[i][0]));
+				addElementsToSection(sortable[i][0], el);
+			}
+		}
+		
 		document.querySelector('.changeText') != null ?
-			document.querySelector('.changeText').addEventListener('click', changeElement) : "";
+		document.querySelector('.changeText').addEventListener('click', changeElement) : "";
 	}
 	else {
 		document.querySelector('.toDoSection').innerHTML = "Відсутні збережені завдання"
 	}
 }
 
-function addElementsToSection(item, date, el) {
+//function addElementsToSection(item, date, el) {
+function addElementsToSection(id, el) {
+	let date = new Date(Number(id));
 	document.querySelector('.toDoSection').innerHTML +=
-		`<div class="toDoElement" id="${item}">` +
+		`<div class="toDoElement" id="${id}">` +
 			`<div class="date">${date.toLocaleDateString()} <br> ${date.toLocaleTimeString()}</div>` +
 			`<div class="importance">${el.importance}</div>` +
 			`<div class="activeStatus">${el.activeStatus}</div>` +
@@ -129,12 +163,14 @@ function clearSection() {
 
 function clearLockalStorage() {
 	localStorage.clear();
-	getAllItems();
+	itemsSort();
 }
 
 function saveTODOList(){
 	localStorage.setItem(toDoList.name, JSON.stringify(toDoList));
 }
+
+
 function changeElement() {
 
 }
