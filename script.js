@@ -184,16 +184,9 @@ function addElementsToSection(id, el) {
 		`<div class="importanceValue">${el.importance}</div>` +
 		`<button class="changeDown"><img src="https://cdn2.iconfinder.com/data/icons/picol-vector/32/arrow_sans_down-512.png" alt="Змінити текст"></button>` +
 		`</div>` +
+		`<textarea class="text"wrap="soft" placeholder="Текст події">${el.text}</textarea>` +
 		`<button class="changeActiveStatus ${el.activeStatus?"active":"inactive"}">` +
 		`<img src="https://cdn1.iconfinder.com/data/icons/solid-icons-part-3/128/check-512.png" alt="Змінити статус">` +
-		`</button>` +
-		/*`<div class="activeStatus">${el.activeStatus}</div>`+*/
-		`<textarea class="text"wrap="soft" placeholder="Текст події">${el.text}</textarea>` +
-		`<button class="changeText">` +
-		`<img src="https://cdn0.iconfinder.com/data/icons/ikooni-outline-seo-web/128/seo2-26-512.png" alt="Змінити текст">` +
-		`</button>` +
-		`<button class="changeImportance">` +
-		`<img src="https://cdn1.iconfinder.com/data/icons/alerts-notifications/48/58-512.png" alt="Змінити важливість">` +
 		`</button>` +
 		`</div>`;
 }

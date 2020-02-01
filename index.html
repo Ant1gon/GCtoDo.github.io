@@ -17,6 +17,7 @@
 			align-items: center;
 			position: relative;
 			width: 80vw;
+			min-width: 300px;
 		}
 
 		.wrapper input[type="text"],
@@ -26,7 +27,8 @@
 
 		.wrapper textarea {
 			resize: none;
-			height: 90%;
+			height: calc(100% - 5px);
+			border-radius: 10px;
 		}
 
 		.wrapper>div {
@@ -36,7 +38,8 @@
 			overflow: auto;
 		}
 
-		.menuSection, .filterSection {
+		.menuSection,
+		.filterSection {
 			display: flex;
 		}
 
@@ -63,10 +66,11 @@
 		}
 
 		.toDoElement>div {
-			margin-right: 10px;
+			margin-right: 2px;
 			display: flex;
 			align-items: center;
 			height: 100%;
+			text-align: center;
 		}
 
 		button {
@@ -74,6 +78,7 @@
 			height: 40px;
 			background: none;
 			border: none;
+			flex-shrink: 0;
 		}
 
 		button>img {
@@ -81,15 +86,25 @@
 			height: 100%;
 			display: block;
 		}
-		.importance{		
+
+		.importance {
 			display: flex;
 			flex-direction: column;
+			justify-content: center;
 		}
-		.importance button{
+
+		.importance button {
 			width: 30px;
-    		height: 25px;
+			height: 25px;
 		}
-		.active{
+
+		.changeActiveStatus{
+			width: 35px;
+			height: 30px;
+			margin-left: 5px;
+		}
+
+		.active {
 			background-color: aqua;
 		}
 	</style>
@@ -110,7 +125,7 @@
 				</button>-->
 				<button class="clearBTN" onclick="">
 					<img src="https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_get_app_48px-512.png"
-					    title="Очистити" alt="GET">
+						title="Очистити" alt="GET">
 				</button>
 			</div>
 			<div class="filterSection">
@@ -123,13 +138,12 @@
 						title="Сортувати за важливістю" alt="Сортування важливість">
 				</button>
 				<input type="text" class="text" title="Фільтр по тексту" placeholder="Знайти за текстом">
-
-				<button class="clearBTN" onclick="">
+				<!--<button class="clearBTN" onclick="">
 					<img src="https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_get_app_48px-512.png"
 						alt="GET">
-				</button>
+				</button>-->
 			</div>
-			<div class="toDoSection">				
+			<div class="toDoSection">
 			</div>
 			<dialog id="dialog">
 				<form method="dialog">
