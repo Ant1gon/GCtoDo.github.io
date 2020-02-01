@@ -3,6 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Document</title>
 	<style>
 		main {
@@ -88,6 +89,9 @@
 			width: 30px;
     		height: 25px;
 		}
+		.active{
+			background-color: aqua;
+		}
 	</style>
 </head>
 
@@ -100,10 +104,10 @@
 					<img src="https://cdn1.iconfinder.com/data/icons/hawcons/32/699313-icon-42-note-add-512.png"
 						title="Додати" alt="Додати">
 				</button>
-				<button class="getBTN" onclick="">
+				<!--<button class="getBTN" onclick="">
 					<img src="https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_get_app_48px-512.png"
 						title="Отримати" alt="Get">
-				</button>
+				</button>-->
 				<button class="clearBTN" onclick="">
 					<img src="https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_get_app_48px-512.png"
 					    title="Очистити" alt="GET">
@@ -125,27 +129,7 @@
 						alt="GET">
 				</button>
 			</div>
-			<div class="toDoSection">
-				<div class="toDoElement" id="1">
-					<div class="date">Date</div>
-					<div class="importance">1</div>
-					<div class="activeStatus">true</div>
-					<div class="text">text</div>
-					<textarea class="text"
-						wrap="soft"> ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss </textarea>
-					<button class="changeText">
-						<img src="https://cdn0.iconfinder.com/data/icons/ikooni-outline-seo-web/128/seo2-26-512.png"
-							alt="Змінити текст">
-					</button>
-					<button class="changeImportance">
-						<img src="https://cdn1.iconfinder.com/data/icons/alerts-notifications/48/58-512.png"
-							alt="Змінити важливість">
-					</button>
-					<button class="changeActiveStatus">
-						<img src="https://cdn1.iconfinder.com/data/icons/solid-icons-part-3/128/check-512.png"
-							alt="Змінити статус">
-					</button>
-				</div>
+			<div class="toDoSection">				
 			</div>
 			<dialog id="dialog">
 				<form method="dialog">
