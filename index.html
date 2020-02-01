@@ -27,14 +27,14 @@
 
 		.wrapper textarea {
 			resize: none;
-			height: calc(100% - 5px);
+			height: calc(100% - 15px);
 			border-radius: 10px;
 		}
 
 		.wrapper>div {
 			width: 100%;
-			margin: 10px 0;
-			max-height: 85vh;
+			margin: 5px 0;
+			max-height: 81vh;
 			overflow: auto;
 		}
 
@@ -53,12 +53,14 @@
 			display: flex;
 			flex-direction: column;
 		}
+		
 
 		.toDoSection>div {
 			margin: 5px 0;
-			height: 10vh;
+			height: 12vh;
 			display: flex;
 			align-items: center;
+			border-radius: 10px;
 		}
 
 		.toDoElement {
@@ -71,9 +73,10 @@
 			align-items: center;
 			height: 100%;
 			text-align: center;
+			justify-content: space-evenly;
 		}
 
-		button {
+		button, .autoUpdateBtn {
 			width: 50px;
 			height: 40px;
 			background: none;
@@ -97,15 +100,25 @@
 			width: 30px;
 			height: 25px;
 		}
+		.toDoControls{
+			display: flex;
+			flex-direction: column;
+		}
 
-		.changeActiveStatus{
-			width: 35px;
-			height: 30px;
-			margin-left: 5px;
+		.toDoControls button{
+			width: 40px;
+    		height: 30px;
+			/* margin-left: 5px; */
+		}
+		.autoUpdate{
+			display: block;
+			width: 100%;
+    		height: 100%;
+			margin: 0;
 		}
 
 		.active {
-			background-color: aqua;
+			background-color: #4ce0e0;
 		}
 	</style>
 </head>
@@ -125,7 +138,7 @@
 				</button>-->
 				<button class="clearBTN" onclick="">
 					<img src="https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_get_app_48px-512.png"
-						title="Очистити" alt="GET">
+						title="Очистити" alt="clean">
 				</button>
 			</div>
 			<div class="filterSection">
@@ -137,7 +150,10 @@
 					<img src="https://cdn2.iconfinder.com/data/icons/font-awesome/1792/sort-numeric-asc-512.png"
 						title="Сортувати за важливістю" alt="Сортування важливість">
 				</button>
-				<input type="text" class="text" title="Фільтр по тексту" placeholder="Знайти за текстом">
+				<input type="text" title="Фільтр по тексту" placeholder="Знайти за текстом">
+				<div class="autoUpdateBtn"  title="Активувати автооновлення">
+					<input type="checkbox" class ="autoUpdate" >
+				</div>
 				<!--<button class="clearBTN" onclick="">
 					<img src="https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_get_app_48px-512.png"
 						alt="GET">

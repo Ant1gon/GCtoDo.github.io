@@ -74,7 +74,7 @@ function addEvents(){
 		}*/
 		let elementToSave =  new ElementToSave(id,importanceNew);
 		saveEditedToDo(elementToSave);
-		itemsSort()
+		if(document.querySelector('.autoUpdate').checked)itemsSort()
 	}));
 }
 
@@ -176,18 +176,23 @@ function itemsSort() {
 function addElementsToSection(id, el) {
 	let date = new Date(Number(id));
 	document.querySelector('.toDoSection').innerHTML +=
-		`<div class="toDoElement" id="${id}">` +
-		`<div class="date">${date.toLocaleDateString()} <br> ${date.toLocaleTimeString()}</div>` +
-		/*`<div class="importance">${el.importance}</div>` +*/
-		`<div class="importance">` +
-		`<button class="changeUp"><img src="https://cdn2.iconfinder.com/data/icons/picol-vector/32/arrow_sans_up-512.png" alt="Змінити текст"></button>` +
-		`<div class="importanceValue">${el.importance}</div>` +
-		`<button class="changeDown"><img src="https://cdn2.iconfinder.com/data/icons/picol-vector/32/arrow_sans_down-512.png" alt="Змінити текст"></button>` +
-		`</div>` +
-		`<textarea class="text"wrap="soft" placeholder="Текст події">${el.text}</textarea>` +
-		`<button class="changeActiveStatus ${el.activeStatus?"active":"inactive"}">` +
-		`<img src="https://cdn1.iconfinder.com/data/icons/solid-icons-part-3/128/check-512.png" alt="Змінити статус">` +
-		`</button>` +
+		`<div class="toDoElement  ${el.activeStatus?"active":"inactive"}" id="${id}">` +
+			`<div class="date">${date.toLocaleDateString()} <br> ${date.toLocaleTimeString()}</div>` +
+			/*`<div class="importance">${el.importance}</div>` +*/
+			`<div class="importance">` +
+			`<button class="changeUp"><img src="https://cdn2.iconfinder.com/data/icons/picol-vector/32/arrow_sans_up-512.png" alt="Змінити текст"></button>` +
+			`<div class="importanceValue">${el.importance}</div>` +
+			`<button class="changeDown"><img src="https://cdn2.iconfinder.com/data/icons/picol-vector/32/arrow_sans_down-512.png" alt="Змінити текст"></button>` +
+			`</div>` +
+			`<textarea class="text"wrap="soft" placeholder="Текст події">${el.text}</textarea>` +
+			`<div class="toDoControls">`+
+				`<button class="changeActiveStatus">` +
+					`<img src="https://cdn1.iconfinder.com/data/icons/material-core/20/check-circle-512.png" alt="Змінити статус">` +
+				`</button>` +
+				`<button class="deleteBtn":"inactive"}">` +
+					`<img src="https://cdn2.iconfinder.com/data/icons/basic-ui-elements-round/700/010_trash-2-512.png" alt="Змінити статус">` +
+				`</button>` +
+			`</div>`+
 		`</div>`;
 }
 
