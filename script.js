@@ -5,16 +5,26 @@ itemsSort();
 document.querySelector('.addBTN').addEventListener('click', addToDoElement);
 //document.querySelector('.getBTN').addEventListener('click', itemsSort());
 
+document.querySelector('.clearBTN').addEventListener('dblclick', ()=>{
+	var dialog = document.getElementById('dialog');
+	dialog.querySelector('.dialogText').innerText = "Видалити всі збережені записи з пам'яті?"
+	dialog.showModal();
+	dialog.addEventListener('close', function (event) {
+		if (dialog.returnValue === 'yes') {
+			clearLockalStorage();
+		}
+	});
+} );
 document.querySelector('.clearBTN').addEventListener('click', clearSection);
-document.querySelector('.clearBTN').addEventListener('dblclick', clearLockalStorage);
 
-class ElementToSave{
-	constructor(id,importance=null,text=null,activeStatus=null) {
+
+class ElementToSave {
+	constructor(id, importance = null, text = null, activeStatus = null) {
 		this.id = id;
 		this.importance = importance;
 		this.text = text;
-		this.activeStatus = activeStatus;		
-	  }
+		this.activeStatus = activeStatus;
+	}
 };
 
 
@@ -23,8 +33,7 @@ document.querySelector('.dateSort').addEventListener('click', () => {
 		if (toDoList.sortBy == "importance") {
 			toDoList.order = "asc";
 			toDoList.sortBy = "date";
-		}
-		else {
+		} else {
 			toDoList.order = toDoList.order == "asc" ? "desc" : "asc";
 		}
 		//console.log("dateSort  " + toDoList.sortBy + " " + toDoList.order)
@@ -37,8 +46,7 @@ document.querySelector('.importanceSort').addEventListener('click', () => {
 		if (toDoList.sortBy == "date") {
 			toDoList.order = "asc";
 			toDoList.sortBy = "importance";
-		}
-		else {
+		} else {
 			toDoList.order = toDoList.order == "asc" ? "desc" : "asc";
 		}
 		//console.log("importanceSort  " + toDoList.sortBy + " " + toDoList.order)
@@ -46,7 +54,8 @@ document.querySelector('.importanceSort').addEventListener('click', () => {
 		saveTODOList();
 	}
 });
-function addEvents(){
+
+function addEvents() {
 	document.querySelectorAll('.importance button').forEach(e => e.addEventListener('click', (arg) => {
 		/*var targetElement = arg.target || arg.srcElement;*/ //чет мне лень было бегать по нодам)))))))) 
 		let id = arg["path"][3]["id"];
@@ -55,12 +64,10 @@ function addEvents(){
 		if (type == 'changeUp') {
 			if (importanceNew == 8) {
 				importanceNew = 1;
-			}
-			else {
+			} else {
 				importanceNew++;
 			}
-		}
-		else {
+		} else {
 			if (importanceNew == 1) {
 				importanceNew = 8;
 			} else {
@@ -72,9 +79,9 @@ function addEvents(){
 			id: id,
 			importance: importanceValue
 		}*/
-		let elementToSave =  new ElementToSave(id,importanceNew);
+		let elementToSave = new ElementToSave(id, importanceNew);
 		saveEditedToDo(elementToSave);
-		if(document.querySelector('.autoUpdate').checked)itemsSort()
+		if (document.querySelector('.autoUpdate').checked) itemsSort()
 	}));
 	document.querySelectorAll('.deleteBtn').forEach(e => e.addEventListener('click', (arg) => {
 		console.log(arg);
@@ -87,14 +94,14 @@ function addEvents(){
 				delete toDoList["elements"][id];
 				saveTODOList(toDoList);
 				itemsSort();
-			 }
+			}
 		});
-	}));	
+	}));
 	document.querySelectorAll('.changeActiveStatus').forEach(e => e.addEventListener('click', (arg) => {
 		let id = arg["path"][3]["id"];
 		let status = arg["path"][3]["className"];
-		console.log(id + "  "+ status.indexOf("active"))
-		let elementToSave =  new ElementToSave(id,null,null,status.indexOf("inactive") != -1?true:false);
+		console.log(id + "  " + status.indexOf("active"))
+		let elementToSave = new ElementToSave(id, null, null, status.indexOf("inactive") != -1 ? true : false);
 		saveEditedToDo(elementToSave);
 		itemsSort();
 	}));
@@ -111,35 +118,46 @@ function getToDoListFromStorage() {
 var dialog = document.getElementById('dialog');
 //dialog.showModal();
 dialog.addEventListener('close', function (event) {
-	if (dialog.returnValue === 'yes') { /* ... */ }
+	if (dialog.returnValue === 'yes') {
+		/* ... */
+	}
 });
 ///
 
 function addToDoElement() {
-	let value = document.querySelector('.text').value;
+	let value = document.querySelector('.text').value.replace(/\s+/g, '');
+	console.log(value);
+	let maxLength = 100;
 	if (value != "") {
-		if (toDoList == null) {
-			toDoList = {
-				name: "toDoList",
-				sortBy: "date",//"date", //importance
-				order: "asc",//"asc", desc
-				language: navigator.language,
-				elements: {}
+		if (value.length < maxLength) {
+			if (toDoList == null) {
+				toDoList = {
+					name: "toDoList",
+					sortBy: "date", //"date", //importance
+					order: "asc", //"asc", desc
+					language: navigator.language,
+					elements: {}
+				}
 			}
+			//let _id = Date.now();		
+			toDoList.elements[Date.now()] = {
+				//createdTime: Date.now(),
+				text: value,
+				activeStatus: true,
+				importance: 1,
+			};
+			localStorage.setItem(toDoList.name, JSON.stringify(toDoList));
+			document.querySelector('.text').value = "";
+			itemsSort();
 		}
-		//let _id = Date.now();		
-		toDoList.elements[Date.now()] = {
-			//createdTime: Date.now(),
-			text: value,
-			activeStatus: true,
-			importance: 1,
-		};
-		localStorage.setItem(toDoList.name, JSON.stringify(toDoList));
-		document.querySelector('.text').value = "";
-		itemsSort();
-	}
-	else {
-		alert("Помилка: неможливо додати заплановану дію не ввівши її опис.\r\nВведіть будь ласка опис і натисніть кнопку Додати")
+		else{
+			alert(`Помилка: Перевищено допустиму кількість символів\r\n
+					Поточна довжина рядка складає: ${value.length}. Обмеження встановлене на рівні: ${maxLength}\r\n
+					Скоротіть будь ласка опис і натисніть кнопку Додати`);
+		}
+	} else {
+		alert("Помилка: неможливо додати заплановану дію не ввівши її опис.\r\nВведіть будь ласка опис і натисніть кнопку Додати");
+		document.querySelector('.text').value = '';
 	}
 }
 
@@ -157,8 +175,7 @@ function itemsSort() {
 				let el = toDoListEl[String(item)];
 				addElementToSection(item, el);
 			});
-		}
-		else if (toDoList.sortBy == "importance") {
+		} else if (toDoList.sortBy == "importance") {
 			var sortable = [];
 			for (let element in toDoListEl) {
 				sortable.push([element, toDoListEl[element]["importance"]]);
@@ -166,16 +183,9 @@ function itemsSort() {
 			sortable.sort(function (a, b) {
 				return a[1] - b[1];
 			});
-			//console.log(sortable);
-			/*var objSorted = {}
-				sortable.forEach(function(item){
-					objSorted[item[0]]=item[1]
-				})*/
-			//console.log(objSorted);
 			if (toDoList.order == "desc") {
 				sortable.reverse();
 			}
-
 			clearSection();
 			for (let i = 0; i < sortable.length; i++) {
 				//console.log(toDoListEl[sortable[i][0]]);
@@ -187,9 +197,8 @@ function itemsSort() {
 		addEvents();
 
 		document.querySelector('.changeText') != null ?
-		document.querySelector('.changeText').addEventListener('click', changeElement) : "";
-	}
-	else {
+			document.querySelector('.changeText').addEventListener('click', changeElement) : "";
+	} else {
 		document.querySelector('.toDoActiveSection').innerHTML = "Відсутні збережені завдання"
 	}
 }
@@ -197,29 +206,29 @@ function itemsSort() {
 //function addElementsToSection(item, date, el) {
 function addElementToSection(id, el) {
 	let date = new Date(Number(id));
-	let toBlock = el.activeStatus?document.querySelector('.toDoActiveSection'): document.querySelector('.toDoInActiveSection');
+	let toBlock = el.activeStatus ? document.querySelector('.toDoActiveSection') : document.querySelector('.toDoInActiveSection');
 	toBlock.innerHTML +=
 		`<div class="toDoElement  ${el.activeStatus?"active":"inactive"}" id="${id}">` +
-			`<div class="date">${date.toLocaleDateString()} <br> ${date.toLocaleTimeString()}</div>` +
-			/*`<div class="importance">${el.importance}</div>` +*/
-			`<div class="importance">` +
-				`<button class="changeUp">
+		`<div class="date">${date.toLocaleDateString()} <br> ${date.toLocaleTimeString()}</div>` +
+		/*`<div class="importance">${el.importance}</div>` +*/
+		`<div class="importance">` +
+		`<button class="changeUp">
 					<img src="https://cdn2.iconfinder.com/data/icons/picol-vector/32/arrow_sans_up-512.png" alt="Збільшити важливість"  title="Збільшити важливість">
 				</button>` +
-				`<div class="importanceValue">${el.importance}</div>` +
-				`<button class="changeDown">
+		`<div class="importanceValue">${el.importance}</div>` +
+		`<button class="changeDown">
 					<img src="https://cdn2.iconfinder.com/data/icons/picol-vector/32/arrow_sans_down-512.png" alt="Зменшити важливість" title="Зменшити важливість">
 				</button>` +
-			`</div>` +
-			`<textarea class="text"wrap="soft" placeholder="Текст події">${el.text}</textarea>` +
-			`<div class="toDoControls">`+
-				`<button class="changeActiveStatus">` +
-					`<img src="https://cdn1.iconfinder.com/data/icons/material-core/20/check-circle-512.png" alt="Змінити статус">` +
-				`</button>` +
-				`<button class="deleteBtn":"inactive"}">` +
-					`<img src="https://cdn2.iconfinder.com/data/icons/basic-ui-elements-round/700/010_trash-2-512.png" alt="Змінити статус">` +
-				`</button>` +
-			`</div>`+
+		`</div>` +
+		`<textarea class="text"wrap="soft" placeholder="Текст події">${el.text}</textarea>` +
+		`<div class="toDoControls">` +
+		`<button class="changeActiveStatus">` +
+		`<img src="https://cdn1.iconfinder.com/data/icons/material-core/20/check-circle-512.png" alt="Змінити статус">` +
+		`</button>` +
+		`<button class="deleteBtn":"inactive"}">` +
+		`<img src="https://cdn2.iconfinder.com/data/icons/basic-ui-elements-round/700/010_trash-2-512.png" alt="Змінити статус">` +
+		`</button>` +
+		`</div>` +
 		`</div>`;
 }
 
@@ -230,14 +239,15 @@ function clearSection() {
 
 function clearLockalStorage() {
 	localStorage.clear();
+	toDoList = getToDoListFromStorage();
 	itemsSort();
 }
 
-function saveEditedToDo(elemToSave){
+function saveEditedToDo(elemToSave) {
 	let editedElement = toDoList.elements[elemToSave.id];
-	if(elemToSave.importance!==null) editedElement.importance = elemToSave.importance;
-	if(elemToSave.text!==null) editedElement.text = elemToSave.text;
-	if(elemToSave.activeStatus!==null) editedElement.activeStatus = elemToSave.activeStatus;
+	if (elemToSave.importance !== null) editedElement.importance = elemToSave.importance;
+	if (elemToSave.text !== null) editedElement.text = elemToSave.text;
+	if (elemToSave.activeStatus !== null) editedElement.activeStatus = elemToSave.activeStatus;
 	toDoList.elements[elemToSave.id] = editedElement;
 	saveTODOList();
 }
