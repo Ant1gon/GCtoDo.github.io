@@ -120,6 +120,17 @@
 		.active {
 			background-color: #4ce0e0;
 		}
+		dialog{
+			border:1px dashed red;
+			border-radius: 10px;
+			background-color: #fbfbba;
+		}
+		dialog div{
+			display: flex;
+		}
+		dialog div button{
+			flex-grow: 1;
+		}
 	</style>
 </head>
 
@@ -151,7 +162,7 @@
 						title="Сортувати за важливістю" alt="Сортування важливість">
 				</button>
 				<input type="text" title="Фільтр по тексту" placeholder="Знайти за текстом">
-				<div class="autoUpdateBtn"  title="Активувати автооновлення">
+				<div class="autoUpdateBtn"  title="Активувати автооновлення при зміні важливості">
 					<input type="checkbox" class ="autoUpdate" >
 				</div>
 				<!--<button class="clearBTN" onclick="">
@@ -163,9 +174,11 @@
 			</div>
 			<dialog id="dialog">
 				<form method="dialog">
-					<p>Would you like to continue?</p>
-					<button type="submit" value="no">No</button>
-					<button type="submit" value="yes">Yes</button>
+					<p>Видалити обраний запис?</p>
+					<div>
+						<button type="submit" value="yes">Так</button>
+						<button type="submit" value="no">Ні</button>
+					</div>
 				</form>
 			</dialog>
 		</div>

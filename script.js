@@ -76,6 +76,25 @@ function addEvents(){
 		saveEditedToDo(elementToSave);
 		if(document.querySelector('.autoUpdate').checked)itemsSort()
 	}));
+	document.querySelectorAll('.deleteBtn').forEach(e => e.addEventListener('click', (arg) => {
+		console.log(arg);
+		let id = arg["path"][3]["id"];
+		var dialog = document.getElementById('dialog');
+		dialog.showModal();
+		dialog.addEventListener('close', function (event) {
+			if (dialog.returnValue === 'yes') {
+				console.log(id);
+				delete toDoList["elements"][id];
+				saveTODOList(toDoList);
+				itemsSort();
+			 }
+		});
+	}));	
+	document.querySelectorAll('.changeActiveStatus').forEach(e => e.addEventListener('click', (arg) => {
+		console.log(arg);
+		let id = arg["path"][3]["id"];
+		
+	}));
 }
 
 
@@ -133,7 +152,7 @@ function itemsSort() {
 			clearSection();
 			itemsKeys.forEach(item => {
 				let el = toDoListEl[String(item)];
-				addElementsToSection(item, el);
+				addElementToSection(item, el);
 			});
 		}
 		else if (toDoList.sortBy == "importance") {
@@ -159,7 +178,7 @@ function itemsSort() {
 				//console.log(toDoListEl[sortable[i][0]]);
 				let el = toDoListEl[sortable[i][0]];
 				let date = new Date(Number(sortable[i][0]));
-				addElementsToSection(sortable[i][0], el);
+				addElementToSection(sortable[i][0], el);
 			}
 		}
 		addEvents();
@@ -173,16 +192,20 @@ function itemsSort() {
 }
 
 //function addElementsToSection(item, date, el) {
-function addElementsToSection(id, el) {
+function addElementToSection(id, el) {
 	let date = new Date(Number(id));
 	document.querySelector('.toDoSection').innerHTML +=
 		`<div class="toDoElement  ${el.activeStatus?"active":"inactive"}" id="${id}">` +
 			`<div class="date">${date.toLocaleDateString()} <br> ${date.toLocaleTimeString()}</div>` +
 			/*`<div class="importance">${el.importance}</div>` +*/
 			`<div class="importance">` +
-			`<button class="changeUp"><img src="https://cdn2.iconfinder.com/data/icons/picol-vector/32/arrow_sans_up-512.png" alt="Змінити текст"></button>` +
-			`<div class="importanceValue">${el.importance}</div>` +
-			`<button class="changeDown"><img src="https://cdn2.iconfinder.com/data/icons/picol-vector/32/arrow_sans_down-512.png" alt="Змінити текст"></button>` +
+				`<button class="changeUp">
+					<img src="https://cdn2.iconfinder.com/data/icons/picol-vector/32/arrow_sans_up-512.png" alt="Збільшити важливість"  title="Збільшити важливість">
+				</button>` +
+				`<div class="importanceValue">${el.importance}</div>` +
+				`<button class="changeDown">
+					<img src="https://cdn2.iconfinder.com/data/icons/picol-vector/32/arrow_sans_down-512.png" alt="Зменшити важливість" title="Зменшити важливість">
+				</button>` +
 			`</div>` +
 			`<textarea class="text"wrap="soft" placeholder="Текст події">${el.text}</textarea>` +
 			`<div class="toDoControls">`+
@@ -195,8 +218,6 @@ function addElementsToSection(id, el) {
 			`</div>`+
 		`</div>`;
 }
-
-
 
 function clearSection() {
 	document.querySelector('.toDoSection').innerHTML = "";
