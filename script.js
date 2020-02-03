@@ -36,7 +36,6 @@ document.querySelector('.dateSort').addEventListener('click', () => {
 		} else {
 			toDoList.order = toDoList.order == "asc" ? "desc" : "asc";
 		}
-		//console.log("dateSort  " + toDoList.sortBy + " " + toDoList.order)
 		itemsSort();
 		saveTODOList();
 	}
@@ -49,7 +48,6 @@ document.querySelector('.importanceSort').addEventListener('click', () => {
 		} else {
 			toDoList.order = toDoList.order == "asc" ? "desc" : "asc";
 		}
-		//console.log("importanceSort  " + toDoList.sortBy + " " + toDoList.order)
 		itemsSort();
 		saveTODOList();
 	}
@@ -75,10 +73,6 @@ function addEvents() {
 			}
 		}
 		arg["path"][2].querySelector('.importanceValue').innerText = importanceNew;
-		/*let elemToSave = {
-			id: id,
-			importance: importanceValue
-		}*/
 		let elementToSave = new ElementToSave(id, importanceNew);
 		saveEditedToDo(elementToSave);
 		if (document.querySelector('.autoUpdate').checked) itemsSort()
@@ -100,7 +94,6 @@ function addEvents() {
 	document.querySelectorAll('.changeActiveStatus').forEach(e => e.addEventListener('click', (arg) => {
 		let id = arg["path"][3]["id"];
 		let status = arg["path"][3]["className"];
-		console.log(id + "  " + status.indexOf("active"))
 		let elementToSave = new ElementToSave(id, null, null, status.indexOf("inactive") != -1 ? true : false);
 		saveEditedToDo(elementToSave);
 		itemsSort();
@@ -126,7 +119,6 @@ dialog.addEventListener('close', function (event) {
 
 function addToDoElement() {
 	let value = document.querySelector('.text').value.replace(/\s+/g, '');
-	console.log(value);
 	let maxLength = 100;
 	if (value != "") {
 		if (value.length < maxLength) {
@@ -139,9 +131,7 @@ function addToDoElement() {
 					elements: {}
 				}
 			}
-			//let _id = Date.now();		
 			toDoList.elements[Date.now()] = {
-				//createdTime: Date.now(),
 				text: value,
 				activeStatus: true,
 				importance: 1,
@@ -188,7 +178,6 @@ function itemsSort() {
 			}
 			clearSection();
 			for (let i = 0; i < sortable.length; i++) {
-				//console.log(toDoListEl[sortable[i][0]]);
 				let el = toDoListEl[sortable[i][0]];
 				let date = new Date(Number(sortable[i][0]));
 				addElementToSection(sortable[i][0], el);
@@ -203,14 +192,12 @@ function itemsSort() {
 	}
 }
 
-//function addElementsToSection(item, date, el) {
 function addElementToSection(id, el) {
 	let date = new Date(Number(id));
 	let toBlock = el.activeStatus ? document.querySelector('.toDoActiveSection') : document.querySelector('.toDoInActiveSection');
 	toBlock.innerHTML +=
 		`<div class="toDoElement  ${el.activeStatus?"active":"inactive"}" id="${id}">` +
 		`<div class="date">${date.toLocaleDateString()} <br> ${date.toLocaleTimeString()}</div>` +
-		/*`<div class="importance">${el.importance}</div>` +*/
 		`<div class="importance">` +
 		`<button class="changeUp">
 					<img src="https://cdn2.iconfinder.com/data/icons/picol-vector/32/arrow_sans_up-512.png" alt="Збільшити важливість"  title="Збільшити важливість">
