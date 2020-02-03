@@ -91,9 +91,12 @@ function addEvents(){
 		});
 	}));	
 	document.querySelectorAll('.changeActiveStatus').forEach(e => e.addEventListener('click', (arg) => {
-		console.log(arg);
 		let id = arg["path"][3]["id"];
-		
+		let status = arg["path"][3]["className"];
+		console.log(id + "  "+ status.indexOf("active"))
+		let elementToSave =  new ElementToSave(id,null,null,status.indexOf("inactive") != -1?true:false);
+		saveEditedToDo(elementToSave);
+		itemsSort();
 	}));
 }
 
@@ -101,7 +104,7 @@ function addEvents(){
 function getToDoListFromStorage() {
 	let temp = JSON.parse(localStorage.getItem("toDoList"));
 	if (temp != null) return JSON.parse(localStorage.getItem("toDoList"))
-	else document.querySelector('.toDoSection').innerHTML = "Відсутні збережені завдання";
+	else document.querySelector('.toDoActiveSection').innerHTML = "Відсутні збережені завдання";
 }
 
 ///
@@ -187,14 +190,15 @@ function itemsSort() {
 		document.querySelector('.changeText').addEventListener('click', changeElement) : "";
 	}
 	else {
-		document.querySelector('.toDoSection').innerHTML = "Відсутні збережені завдання"
+		document.querySelector('.toDoActiveSection').innerHTML = "Відсутні збережені завдання"
 	}
 }
 
 //function addElementsToSection(item, date, el) {
 function addElementToSection(id, el) {
 	let date = new Date(Number(id));
-	document.querySelector('.toDoSection').innerHTML +=
+	let toBlock = el.activeStatus?document.querySelector('.toDoActiveSection'): document.querySelector('.toDoInActiveSection');
+	toBlock.innerHTML +=
 		`<div class="toDoElement  ${el.activeStatus?"active":"inactive"}" id="${id}">` +
 			`<div class="date">${date.toLocaleDateString()} <br> ${date.toLocaleTimeString()}</div>` +
 			/*`<div class="importance">${el.importance}</div>` +*/
@@ -220,7 +224,8 @@ function addElementToSection(id, el) {
 }
 
 function clearSection() {
-	document.querySelector('.toDoSection').innerHTML = "";
+	document.querySelector('.toDoActiveSection').innerHTML = "";
+	document.querySelector('.toDoInActiveSection').innerHTML = "";
 }
 
 function clearLockalStorage() {

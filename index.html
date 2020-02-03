@@ -49,14 +49,17 @@
 			width: 65%;
 		}*/
 
-		.toDoSection {
+		.toDoActiveSection, .toDoInActiveSection {
 			display: flex;
 			flex-direction: column;
 		}
-		
+		.toDoInActiveSection{
+			border-top: 2px double black;
+		}
 
-		.toDoSection>div {
+		.toDoActiveSection>div, .toDoInActiveSection>div {
 			margin: 5px 0;
+			padding: 0 5px;
 			height: 12vh;
 			display: flex;
 			align-items: center;
@@ -170,7 +173,9 @@
 						alt="GET">
 				</button>-->
 			</div>
-			<div class="toDoSection">
+			<div class="toDoActiveSection">
+			</div>
+			<div class="toDoInActiveSection">
 			</div>
 			<dialog id="dialog">
 				<form method="dialog">
