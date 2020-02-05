@@ -3,9 +3,8 @@ var toDoList = getToDoListFromStorage();
 itemsSort();
 
 document.querySelector('.addBTN').addEventListener('click', addToDoElement);
-//document.querySelector('.getBTN').addEventListener('click', itemsSort());
 
-document.querySelector('.clearBTN').addEventListener('dblclick', () => {
+document.querySelector('.clearBTN').addEventListener('click', () => {
 	var dialog = document.getElementById('dialog');
 	dialog.querySelector('.dialogText').innerText = "Видалити всі збережені записи з пам'яті?"
 	dialog.showModal();
@@ -15,7 +14,6 @@ document.querySelector('.clearBTN').addEventListener('dblclick', () => {
 		}
 	});
 });
-document.querySelector('.clearBTN').addEventListener('click', clearSection);
 
 document.querySelector('.dateSort').addEventListener('click', () => {
 	if (toDoList != null) {
@@ -76,10 +74,8 @@ function addEvents() {
 		saveEditedToDo(elementToSave);
 		if (document.querySelector('.autoUpdate').checked) itemsSort()
 	}));
-	document.querySelectorAll('.deleteBtn').forEach(e => e.addEventListener('click', (arg) => {
-		
-		let id = arg["path"][3]["id"];
-		
+	document.querySelectorAll('.deleteBtn').forEach(e => e.addEventListener('click', (arg) => {		
+		let id = arg["path"][3]["id"];		
 		$dialog.showModal();
 		$dialog.addEventListener('close', function (event) {
 			if ($dialog.returnValue === 'yes') {
@@ -104,10 +100,23 @@ function addEvents() {
 			saveEditedToDo(elementToSave);
 			toDoList = getToDoListFromStorage();
 		}else {
-
+			$dialog.showModal();
+			$dialog.addEventListener('close', function (event) {
+				if ($dialog.returnValue === 'yes') {
+					delete toDoList["elements"][id];
+					saveTODOList(toDoList);
+					itemsSort();
+				}else {
+					itemsSort();
+				}
+			});
 		}
-		
 	}));
+	document.querySelectorAll('.textFilter').forEach(e => e.addEventListener('input', (arg) => {
+		let textFilter = e.value;
+		itemsSort(textFilter);
+	}));
+
 }
 
 
@@ -118,13 +127,13 @@ function getToDoListFromStorage() {
 }
 
 ///
-var dialog = document.getElementById('dialog');
-//dialog.showModal();
+/*var dialog = document.getElementById('dialog');
+dialog.showModal();
 dialog.addEventListener('close', function (event) {
 	if (dialog.returnValue === 'yes') {
-		/* ... */
+
 	}
-});
+});*/
 ///
 
 function addToDoElement() {
@@ -161,7 +170,7 @@ function addToDoElement() {
 	}
 }
 
-function itemsSort() {
+function itemsSort(textFilter) {
 	if (toDoList != null) {
 		let toDoListEl = toDoList.elements;
 		if (toDoList.sortBy == "date") {
@@ -173,7 +182,12 @@ function itemsSort() {
 			clearSection();
 			itemsKeys.forEach(item => {
 				let el = toDoListEl[String(item)];
-				addElementToSection(item, el);
+				if(textFilter == null){
+					addElementToSection(item, el);
+				}
+				else if(el.text.indexOf(textFilter) !== -1){
+					addElementToSection(item, el);
+				}
 			});
 		} else if (toDoList.sortBy == "importance") {
 			var sortable = [];
@@ -189,8 +203,12 @@ function itemsSort() {
 			clearSection();
 			for (let i = 0; i < sortable.length; i++) {
 				let el = toDoListEl[sortable[i][0]];
-				let date = new Date(Number(sortable[i][0]));
-				addElementToSection(sortable[i][0], el);
+				if(textFilter == null){
+					addElementToSection(sortable[i][0], el);
+				}
+				else if(el.text.indexOf(textFilter) !== -1){
+					addElementToSection(sortable[i][0], el);
+				}
 			}
 		}
 		addEvents();

@@ -43,12 +43,6 @@
 			display: flex;
 		}
 
-		/*
-		.menuSection .text {
-			display: flex;
-			width: 65%;
-		}*/
-
 		.toDoActiveSection, .toDoInActiveSection {
 			display: flex;
 			flex-direction: column;
@@ -111,7 +105,6 @@
 		.toDoControls button{
 			width: 40px;
     		height: 30px;
-			/* margin-left: 5px; */
 		}
 		.autoUpdate{
 			display: block;
@@ -146,13 +139,9 @@
 					<img src="https://cdn1.iconfinder.com/data/icons/hawcons/32/699313-icon-42-note-add-512.png"
 						title="Додати" alt="Додати">
 				</button>
-				<!--<button class="getBTN" onclick="">
-					<img src="https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_get_app_48px-512.png"
-						title="Отримати" alt="Get">
-				</button>-->
 				<button class="clearBTN" onclick="">
 					<img src="https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_get_app_48px-512.png"
-						title="Очистити" alt="clean">
+						title='Очистити в локал сторедж' alt="clean">
 				</button>
 			</div>
 			<div class="filterSection">
@@ -164,14 +153,10 @@
 					<img src="https://cdn2.iconfinder.com/data/icons/font-awesome/1792/sort-numeric-asc-512.png"
 						title="Сортувати за важливістю" alt="Сортування важливість">
 				</button>
-				<input type="text" title="Фільтр по тексту" placeholder="Знайти за текстом">
+				<input type="text" class="textFilter" title="Фільтр по тексту" placeholder="Знайти за текстом">
 				<div class="autoUpdateBtn"  title="Активувати автооновлення при зміні важливості">
 					<input type="checkbox" class ="autoUpdate" >
 				</div>
-				<!--<button class="clearBTN" onclick="">
-					<img src="https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_get_app_48px-512.png"
-						alt="GET">
-				</button>-->
 			</div>
 			<div class="toDoActiveSection">
 			</div>
