@@ -157,6 +157,7 @@ function addToDoElement() {
 			};
 			localStorage.setItem(toDoList.name, JSON.stringify(toDoList));
 			document.querySelector('.text').value = "";
+			document.querySelector('.text').focus();
 			itemsSort();
 		}
 		else {
