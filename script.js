@@ -5,7 +5,7 @@ itemsSort();
 document.querySelector('.addBTN').addEventListener('click', addToDoElement);
 //document.querySelector('.getBTN').addEventListener('click', itemsSort());
 
-document.querySelector('.clearBTN').addEventListener('dblclick', ()=>{
+document.querySelector('.clearBTN').addEventListener('dblclick', () => {
 	var dialog = document.getElementById('dialog');
 	dialog.querySelector('.dialogText').innerText = "Видалити всі збережені записи з пам'яті?"
 	dialog.showModal();
@@ -14,19 +14,8 @@ document.querySelector('.clearBTN').addEventListener('dblclick', ()=>{
 			clearLockalStorage();
 		}
 	});
-} );
+});
 document.querySelector('.clearBTN').addEventListener('click', clearSection);
-
-
-class ElementToSave {
-	constructor(id, importance = null, text = null, activeStatus = null) {
-		this.id = id;
-		this.importance = importance;
-		this.text = text;
-		this.activeStatus = activeStatus;
-	}
-};
-
 
 document.querySelector('.dateSort').addEventListener('click', () => {
 	if (toDoList != null) {
@@ -53,9 +42,19 @@ document.querySelector('.importanceSort').addEventListener('click', () => {
 	}
 });
 
+class ElementToSave {
+	constructor(id, importance = null, text = null, activeStatus = null) {
+		this.id = id;
+		this.importance = importance;
+		this.text = text;
+		this.activeStatus = activeStatus;
+	}
+};
+
+var $dialog = document.getElementById('dialog');
+
 function addEvents() {
 	document.querySelectorAll('.importance button').forEach(e => e.addEventListener('click', (arg) => {
-		/*var targetElement = arg.target || arg.srcElement;*/ //чет мне лень было бегать по нодам)))))))) 
 		let id = arg["path"][3]["id"];
 		let type = arg["path"][1]["className"];
 		let importanceNew = arg["path"][2].querySelector('.importanceValue').innerText;
@@ -78,13 +77,12 @@ function addEvents() {
 		if (document.querySelector('.autoUpdate').checked) itemsSort()
 	}));
 	document.querySelectorAll('.deleteBtn').forEach(e => e.addEventListener('click', (arg) => {
-		console.log(arg);
+		
 		let id = arg["path"][3]["id"];
-		var dialog = document.getElementById('dialog');
-		dialog.showModal();
-		dialog.addEventListener('close', function (event) {
-			if (dialog.returnValue === 'yes') {
-				console.log(id);
+		
+		$dialog.showModal();
+		$dialog.addEventListener('close', function (event) {
+			if ($dialog.returnValue === 'yes') {
 				delete toDoList["elements"][id];
 				saveTODOList(toDoList);
 				itemsSort();
@@ -97,6 +95,18 @@ function addEvents() {
 		let elementToSave = new ElementToSave(id, null, null, status.indexOf("inactive") != -1 ? true : false);
 		saveEditedToDo(elementToSave);
 		itemsSort();
+	}));
+	document.querySelectorAll('.toDoElement textarea').forEach(e => e.addEventListener('input', (arg) => {
+		let id = arg["path"][1]["id"];
+		let text = e.value;
+		let elementToSave = new ElementToSave(id, null, text);
+		if (text.length > 0) {
+			saveEditedToDo(elementToSave);
+			toDoList = getToDoListFromStorage();
+		}else {
+
+		}
+		
 	}));
 }
 
@@ -125,7 +135,7 @@ function addToDoElement() {
 			if (toDoList == null) {
 				toDoList = {
 					name: "toDoList",
-					sortBy: "date", //"date", //importance
+					sortBy: "importance", //"date", //importance
 					order: "asc", //"asc", desc
 					language: navigator.language,
 					elements: {}
@@ -140,7 +150,7 @@ function addToDoElement() {
 			document.querySelector('.text').value = "";
 			itemsSort();
 		}
-		else{
+		else {
 			alert(`Помилка: Перевищено допустиму кількість символів\r\n
 					Поточна довжина рядка складає: ${value.length}. Обмеження встановлене на рівні: ${maxLength}\r\n
 					Скоротіть будь ласка опис і натисніть кнопку Додати`);
@@ -196,7 +206,7 @@ function addElementToSection(id, el) {
 	let date = new Date(Number(id));
 	let toBlock = el.activeStatus ? document.querySelector('.toDoActiveSection') : document.querySelector('.toDoInActiveSection');
 	toBlock.innerHTML +=
-		`<div class="toDoElement  ${el.activeStatus?"active":"inactive"}" id="${id}">` +
+		`<div class="toDoElement  ${el.activeStatus ? "active" : "inactive"}" id="${id}">` +
 		`<div class="date">${date.toLocaleDateString()} <br> ${date.toLocaleTimeString()}</div>` +
 		`<div class="importance">` +
 		`<button class="changeUp">
@@ -232,9 +242,9 @@ function clearLockalStorage() {
 
 function saveEditedToDo(elemToSave) {
 	let editedElement = toDoList.elements[elemToSave.id];
-	if (elemToSave.importance !== null) editedElement.importance = elemToSave.importance;
-	if (elemToSave.text !== null) editedElement.text = elemToSave.text;
-	if (elemToSave.activeStatus !== null) editedElement.activeStatus = elemToSave.activeStatus;
+	if (elemToSave.importance != null) editedElement.importance = elemToSave.importance;
+	if (elemToSave.text != null && elemToSave.text.length != 0) editedElement.text = elemToSave.text;
+	if (elemToSave.activeStatus != null) editedElement.activeStatus = elemToSave.activeStatus;
 	toDoList.elements[elemToSave.id] = editedElement;
 	saveTODOList();
 }
