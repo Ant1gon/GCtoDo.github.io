@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Document</title>
+	<style>
+		main {
+			display: flex;
+			justify-content: center;
+		}
+
+		.wrapper {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			position: relative;
+			width: 80vw;
+			min-width: 300px;
+		}
+
+		.wrapper input[type="text"],
+		.wrapper textarea {
+			flex-grow: 4;
+		}
+
+		.wrapper textarea {
+			resize: none;
+			height: calc(100% - 15px);
+			border-radius: 10px;
+		}
+
+		.wrapper>div {
+			width: 100%;
+			margin: 5px 0;
+			max-height: 81vh;
+			overflow: auto;
+		}
+
+		.menuSection,
+		.filterSection {
+			display: flex;
+		}
+
+		.toDoActiveSection, .toDoInActiveSection {
+			display: flex;
+			flex-direction: column;
+		}
+		.toDoInActiveSection{
+			border-top: 2px double black;
+		}
+
+		.toDoActiveSection>div, .toDoInActiveSection>div {
+			margin: 5px 0;
+			padding: 0 5px;
+			height: 12vh;
+			display: flex;
+			align-items: center;
+			border-radius: 10px;
+		}
+
+		.toDoElement {
+			display: flex;
+		}
+
+		.toDoElement>div {
+			margin-right: 2px;
+			display: flex;
+			align-items: center;
+			height: 100%;
+			text-align: center;
+			justify-content: space-evenly;
+		}
+
+		button, .autoUpdateBtn {
+			width: 50px;
+			height: 40px;
+			background: none;
+			border: none;
+			flex-shrink: 0;
+		}
+
+		button>img {
+			width: 100%;
+			height: 100%;
+			display: block;
+		}
+
+		.importance {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		.importance button {
+			width: 30px;
+			height: 25px;
+		}
+		.toDoControls{
+			display: flex;
+			flex-direction: column;
+		}
+
+		.toDoControls button{
+			width: 40px;
+    		height: 30px;
+		}
+		.autoUpdate{
+			display: block;
+			width: 100%;
+    		height: 100%;
+			margin: 0;
+		}
+
+		.active {
+			background-color: #4ce0e0;
+		}
+		dialog{
+			border:1px dashed red;
+			border-radius: 10px;
+			background-color: #fbfbba;
+		}
+		dialog div{
+			display: flex;
+		}
+		dialog div button{
+			flex-grow: 1;
+		}
+	</style>
+</head>
+
+<body>
+	<main>
+		<div class="wrapper">
+			<div class="menuSection">
+				<input type="text" class="text" autofocus="autofocus" title="Опис події" placeholder="Опис події">
+				<button class="addBTN" onclick="">
+					<img src="https://cdn1.iconfinder.com/data/icons/hawcons/32/699313-icon-42-note-add-512.png"
+						title="Додати" alt="Додати">
+				</button>
+				<button class="clearBTN" onclick="">
+					<img src="https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_get_app_48px-512.png"
+						title='Очистити в локал сторедж' alt="clean">
+				</button>
+			</div>
+			<div class="filterSection">
+				<button class="dateSort" name="dateSort" onclick="">
+					<img src="https://cdn1.iconfinder.com/data/icons/flat-web-browser/100/sort-512.png"
+						title="Сортувати за датою" alt="Сортування дата">
+				</button>
+				<button class="importanceSort" name="importanceSort" onclick="">
+					<img src="https://cdn2.iconfinder.com/data/icons/font-awesome/1792/sort-numeric-asc-512.png"
+						title="Сортувати за важливістю" alt="Сортування важливість">
+				</button>
+				<input type="text" class="textFilter" title="Фільтр по тексту" placeholder="Знайти за текстом">
+				<div class="autoUpdateBtn"  title="Активувати автооновлення при зміні важливості">
+					<input type="checkbox" class ="autoUpdate" >
+				</div>
+			</div>
+			<div class="toDoActiveSection">
+			</div>
+			<div class="toDoInActiveSection">
+			</div>
+			<dialog id="dialog">
+				<form method="dialog">
+					<p class="dialogText">Видалити обраний запис?</p>
+					<div>
+						<button type="submit" value="yes">Так</button>
+						<button type="submit" value="no">Ні</button>
+					</div>
+				</form>
+			</dialog>
+		</div>
+		<script src="script.js"></script>
+		</div>
+	</main>
+</body>
+
+</html>
